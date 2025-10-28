@@ -1,7 +1,7 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 
 from app.middleware.auth_middleware import AuthMiddleware
-from app.routes import audio, auth, notes, nlp
+from app.routes import audio, auth, nlp, notes
 
 app = FastAPI(title="AI Note-Taking Assistant API")
 

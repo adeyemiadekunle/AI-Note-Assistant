@@ -1,11 +1,11 @@
-﻿from datetime import UTC, datetime
+from datetime import UTC, datetime
 from types import SimpleNamespace
 
 from fastapi.testclient import TestClient
 
 from app.main import app
-import app.routes.notes as notes_route
 from app.models.note_model import NoteRead
+from app.routes import notes as notes_route
 from app.services import auth_service
 
 client = TestClient(app)
