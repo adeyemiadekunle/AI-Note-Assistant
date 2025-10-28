@@ -1,0 +1,26 @@
+﻿services:
+  api:
+    build: .
+    container_name: ai-note-assistant-api
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/ai_note_assistant
+    ports:
+      - "8000:8000"
+
+  mongo:
+    image: mongo:7.0
+    container_name: ai-note-assistant-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: ai_note_assistant
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
