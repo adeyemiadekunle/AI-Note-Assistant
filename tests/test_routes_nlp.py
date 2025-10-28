@@ -22,8 +22,9 @@ def test_summarise_endpoint_returns_payload(monkeypatch) -> None:
         }
 
     monkeypatch.setattr(nlp_route, "generate_summary", fake_generate_summary)
+    monkeypatch.setattr(auth_service, "get_user_from_token", _stub_get_user_from_token)
 
-    response = client.post("/api/summarise", json={"transcript": "hello"})
+    response = client.post("/api/summarise", json={"transcript": "hello"}, headers=AUTH_HEADER)
 
     assert response.status_code == 200
     body = response.json()
@@ -37,8 +38,9 @@ def test_summarise_endpoint_handles_errors(monkeypatch) -> None:
         raise ValueError("bad data")
 
     monkeypatch.setattr(nlp_route, "generate_summary", fake_generate_summary)
+    monkeypatch.setattr(auth_service, "get_user_from_token", _stub_get_user_from_token)
 
-    response = client.post("/api/summarise", json={"transcript": ""})
+    response = client.post("/api/summarise", json={"transcript": ""}, headers=AUTH_HEADER)
 
     assert response.status_code == 400
     assert response.json()["detail"] == "bad data"
