@@ -60,7 +60,7 @@ Routes under `/api/notes` and `/api/mindmap` require an `Authorization: Bearer <
 ### Tests
 
 ```bash
-pytest
+python -m pytest
 ```
 
 ## Project Layout
