@@ -1,7 +1,9 @@
 ﻿from typing import Dict, List
 
 
-def build_mindmap(actions: List[Dict[str, str]], topics: List[str]) -> Dict[str, List[Dict[str, str]]]:
+def build_mindmap(
+    actions: List[Dict[str, str]], topics: List[str]
+) -> Dict[str, List[Dict[str, str]]]:
     """Construct minimal mind map structure until networkx integration is added."""
     nodes = [{"id": "root", "label": "Meeting Summary"}]
     links: List[Dict[str, str]] = []

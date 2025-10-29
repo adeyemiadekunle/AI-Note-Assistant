@@ -32,7 +32,9 @@ def _get_or_load_model(model_name: str):
     return _model_cache[model_name]
 
 
-def _transcribe_sync(file_bytes: bytes, language: Optional[str], model_name: str) -> TranscriptionResult:
+def _transcribe_sync(
+    file_bytes: bytes, language: Optional[str], model_name: str
+) -> TranscriptionResult:
     model = _get_or_load_model(model_name)
     tmp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
     try:
