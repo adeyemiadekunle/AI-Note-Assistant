@@ -117,7 +117,10 @@ async def get_user_from_token(token: str) -> UserPublic:
     settings = get_settings()
     secret = settings.jwt_secret
     if not secret:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="JWT secret is not configured.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="JWT secret is not configured.",
+        )
 
     try:
         payload = jwt.decode(token, secret, algorithms=[settings.jwt_algorithm])
@@ -125,7 +128,9 @@ async def get_user_from_token(token: str) -> UserPublic:
         if user_id is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token.")
     except JWTError as exc:  # pragma: no cover
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token.") from exc
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token."
+        ) from exc
 
     user = await get_user_by_id(user_id)
     if user is None:

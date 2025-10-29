@@ -1,11 +1,11 @@
-﻿from datetime import UTC, datetime
+from datetime import UTC, datetime
 from types import SimpleNamespace
 
 from fastapi.testclient import TestClient
 
 from app.main import app
-import app.routes.nlp as nlp_route
 from app.models.note_model import NoteRead
+from app.routes import nlp as nlp_route
 from app.services import auth_service
 
 client = TestClient(app)
@@ -22,8 +22,9 @@ def test_summarise_endpoint_returns_payload(monkeypatch) -> None:
         }
 
     monkeypatch.setattr(nlp_route, "generate_summary", fake_generate_summary)
+    monkeypatch.setattr(auth_service, "get_user_from_token", _stub_get_user_from_token)
 
-    response = client.post("/api/summarise", json={"transcript": "hello"})
+    response = client.post("/api/summarise", json={"transcript": "hello"}, headers=AUTH_HEADER)
 
     assert response.status_code == 200
     body = response.json()
@@ -37,8 +38,9 @@ def test_summarise_endpoint_handles_errors(monkeypatch) -> None:
         raise ValueError("bad data")
 
     monkeypatch.setattr(nlp_route, "generate_summary", fake_generate_summary)
+    monkeypatch.setattr(auth_service, "get_user_from_token", _stub_get_user_from_token)
 
-    response = client.post("/api/summarise", json={"transcript": ""})
+    response = client.post("/api/summarise", json={"transcript": ""}, headers=AUTH_HEADER)
 
     assert response.status_code == 400
     assert response.json()["detail"] == "bad data"

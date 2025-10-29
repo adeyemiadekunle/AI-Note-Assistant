@@ -55,9 +55,16 @@ The FastAPI app will be available on `http://127.0.0.1:8000` and MongoDB will li
 
 ### Authentication
 
-Routes under `/api/notes` and `/api/mindmap` require an `Authorization: Bearer <token>` header issued by the signup/login endpoints.
+Routes under `/api/notes`, `/api/mindmap`, and `/api/summarise` require an `Authorization: Bearer <token>` header issued by the signup/login endpoints.
 
 ### Tests
+### Tooling
+
+```bash
+ruff check .
+black .
+```
+
 
 ```bash
 python -m pytest

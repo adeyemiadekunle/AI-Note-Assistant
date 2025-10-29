@@ -30,9 +30,10 @@ class SummariseResponse(BaseModel):
 
 
 @router.post("/summarise", response_model=SummariseResponse)
-async def summarise(request: SummariseRequest) -> SummariseResponse:
+async def summarise(request: Request, payload: SummariseRequest) -> SummariseResponse:
+    _require_user(request)
     try:
-        result = await generate_summary(request.transcript)
+        result = await generate_summary(payload.transcript)
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     except RuntimeError as exc:

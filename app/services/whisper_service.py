@@ -1,6 +1,7 @@
 ﻿from __future__ import annotations
 
 import asyncio
+import os
 import tempfile
 from dataclasses import dataclass
 from threading import Lock
@@ -31,12 +32,25 @@ def _get_or_load_model(model_name: str):
     return _model_cache[model_name]
 
 
-def _transcribe_sync(file_bytes: bytes, language: Optional[str], model_name: str) -> TranscriptionResult:
+def _transcribe_sync(
+    file_bytes: bytes, language: Optional[str], model_name: str
+) -> TranscriptionResult:
     model = _get_or_load_model(model_name)
-    with tempfile.NamedTemporaryFile(suffix=".wav") as tmp:
-        tmp.write(file_bytes)
-        tmp.flush()
-        result = model.transcribe(tmp.name, language=language)
+    tmp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+    try:
+        tmp_file.write(file_bytes)
+        tmp_file.flush()
+        tmp_path = tmp_file.name
+    finally:
+        tmp_file.close()
+
+    try:
+        result = model.transcribe(tmp_path, language=language)
+    finally:
+        try:
+            os.remove(tmp_path)
+        except OSError:
+            pass
 
     text = result.get("text", "").strip()
     language_detected = result.get("language") or language

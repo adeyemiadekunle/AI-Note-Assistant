@@ -1,13 +1,12 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from typing import Any, Dict
 
+import pytest
 from bson import ObjectId
 from fastapi.testclient import TestClient
-import pytest
 
 from app.main import app
-import app.routes.auth as auth_route
 from app.services import auth_service
 
 client = TestClient(app)

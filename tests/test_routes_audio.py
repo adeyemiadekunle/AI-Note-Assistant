@@ -1,7 +1,7 @@
-﻿from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient
 
 from app.main import app
-import app.routes.audio as audio_route
+from app.routes import audio as audio_route
 from app.services.whisper_service import TranscriptionResult
 
 client = TestClient(app)
